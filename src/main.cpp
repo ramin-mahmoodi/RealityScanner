@@ -2,6 +2,10 @@
 #include <backends/imgui_impl_glfw.h>
 #include <backends/imgui_impl_opengl3.h>
 #include <GLFW/glfw3.h>
+#ifdef _WIN32
+#define GLFW_EXPOSE_NATIVE_WIN32
+#include <GLFW/glfw3native.h>
+#endif
 #include <iostream>
 #include "app.h"
 
@@ -69,6 +73,15 @@ int main(int, char**) {
     glfwSetWindowPos(window, xpos, ypos);glfwSetWindowSizeLimits(window, 800, 600, GLFW_DONT_CARE, GLFW_DONT_CARE);
     glfwMakeContextCurrent(window);
     glfwSwapInterval(1); // Enable vsync
+    
+#ifdef _WIN32
+    HWND hwnd = glfwGetWin32Window(window);
+    HICON hIcon = LoadIcon(GetModuleHandle(NULL), MAKEINTRESOURCE(1));
+    if (hIcon) {
+        SendMessage(hwnd, WM_SETICON, ICON_SMALL, (LPARAM)hIcon);
+        SendMessage(hwnd, WM_SETICON, ICON_BIG, (LPARAM)hIcon);
+    }
+#endif
 
     IMGUI_CHECKVERSION();
     ImGui::CreateContext();
