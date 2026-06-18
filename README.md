@@ -1,5 +1,7 @@
 # RealityScanner
 
+![Preview](Preview.png)
+
 RealityScanner is a fast, standalone, and professional Windows application built with C++ and ImGui to help you scan and find the best SNI domains for your X-UI Reality configuration.
 
 ## Features
