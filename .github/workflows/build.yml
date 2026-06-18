@@ -1,0 +1,32 @@
+name: Build Windows Executable
+
+on:
+  push:
+    branches: [ "main" ]
+  pull_request:
+    branches: [ "main" ]
+
+jobs:
+  build:
+    runs-on: windows-latest
+
+    steps:
+    - uses: actions/checkout@v3
+
+    - name: Setup MinGW
+      uses: egor-tensin/setup-mingw@v2
+
+    - name: Configure CMake
+      run: cmake -B build -G "MinGW Makefiles" -DCMAKE_BUILD_TYPE=Release
+
+    - name: Build
+      run: cmake --build build --config Release
+
+    - name: Strip executable
+      run: strip build/RealityScanner.exe
+
+    - name: Upload Artifact
+      uses: actions/upload-artifact@v3
+      with:
+        name: RealityScanner-Windows
+        path: build/RealityScanner.exe
