@@ -9,6 +9,7 @@
 #include <iostream>
 #include "app.h"
 #include "IconsFontAwesome6.h"
+#include "fa_solid_900.h"
 
 static void glfw_error_callback(int error, const char* description) {
     std::cerr << "GLFW Error " << error << ": " << description << std::endl;
@@ -114,9 +115,9 @@ int main(int, char**) {
         icons_config.PixelSnapH = true;
         icons_config.OversampleH = 1;
         icons_config.OversampleV = 1;
-        io.Fonts->AddFontFromFileTTF("fonts/fa-solid-900.ttf", 16.0f * xscale, &icons_config, icon_ranges);
+        icons_config.FontDataOwnedByAtlas = false; // Because we use a const C array
+        io.Fonts->AddFontFromMemoryTTF((void*)fa_solid_900_ttf, fa_solid_900_ttf_len, 16.0f * xscale, &icons_config, icon_ranges);
         
-        // Load Bold font as the second font (AFTER FontAwesome is merged into the first)
         ImFontConfig bold_config = font_config;
         bold_config.MergeMode = false;
         io.Fonts->AddFontFromFileTTF("C:\\Windows\\Fonts\\segoeuib.ttf", 20.0f * xscale, &bold_config);
