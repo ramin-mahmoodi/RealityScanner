@@ -1,7 +1,9 @@
 # RealityScanner
 
-![Preview Settings](assets/1.png)
-![Preview Results](assets/2.png)
+<div align="center">
+  <img src="assets/1.png" width="48%" />
+  <img src="assets/2.png" width="48%" />
+</div>
 
 RealityScanner is a fast, standalone, and professional Windows application built with C++ and ImGui to help you scan and find the best SNI domains for your **Reality** configurations. It works by connecting directly to your **3x-ui** panel to dynamically generate and test configurations.
 
@@ -16,7 +18,7 @@ RealityScanner is a fast, standalone, and professional Windows application built
 
 ## Usage
 Simply run `RealityScanner.exe`.
-1. Open the app and enter your **3x-ui** panel URL, Login Token (Cookie), and the Target Port.
+1. Open the app and enter your **3x-ui** panel URL, API Token (found in 3x-ui under Settings → API Token), and the Target Port.
 2. Ensure you have downloaded the Xray core from the Settings tab.
 3. Switch to the Domains List tab to paste or load your SNI domains.
 4. Click **Start Scan** and watch the results table to find the lowest ping SNI!

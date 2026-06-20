@@ -167,7 +167,7 @@ void App::RenderUI() {
             ImGui::InputText("##BaseURL", m_baseUrl, IM_ARRAYSIZE(m_baseUrl));
             ImGui::PopItemWidth();
             
-            ImGui::Text("Panel Token");
+            ImGui::Text("API Token");
             ImGui::PushItemWidth(-1);
             ImGui::InputText("##Token", m_token, IM_ARRAYSIZE(m_token));
             ImGui::PopItemWidth();
