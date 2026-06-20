@@ -57,9 +57,9 @@ target_include_directories(RealityScanner PRIVATE
     ${imgui_SOURCE_DIR}/backends
 )
 
-# Fully static linking so no DLLs are required on other PCs
+# Fully static linking and stripping to reduce size and remove dependencies
 if (MINGW OR CMAKE_CXX_COMPILER_ID MATCHES "GNU")
-    target_link_options(RealityScanner PRIVATE "-static" "-static-libgcc" "-static-libstdc++")
+    target_link_options(RealityScanner PRIVATE "-static" "-static-libgcc" "-static-libstdc++" "-s")
 endif()
 
 target_link_libraries(RealityScanner PRIVATE

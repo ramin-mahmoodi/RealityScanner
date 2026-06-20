@@ -8,6 +8,7 @@
 #endif
 #include <iostream>
 #include "app.h"
+#include "IconsFontAwesome6.h"
 
 static void glfw_error_callback(int error, const char* description) {
     std::cerr << "GLFW Error " << error << ": " << description << std::endl;
@@ -28,7 +29,7 @@ void RenderFrame(GLFWwindow* window) {
     int display_w, display_h;
     glfwGetFramebufferSize(window, &display_w, &display_h);
     glViewport(0, 0, display_w, display_h);
-    glClearColor(0.12f, 0.12f, 0.14f, 1.0f); // Match ImGui background
+    // The clear color will be managed by the app theme now
     glClear(GL_COLOR_BUFFER_BIT);
     ImGui_ImplOpenGL3_RenderDrawData(ImGui::GetDrawData());
 
@@ -59,8 +60,13 @@ int main(int, char**) {
 
     GLFWmonitor* primary = glfwGetPrimaryMonitor();
     const GLFWvidmode* mode = glfwGetVideoMode(primary);
-    int windowWidth = 1000;
-    int windowHeight = 700;
+    
+    float monXScale = 1.0f, monYScale = 1.0f;
+    glfwGetMonitorContentScale(primary, &monXScale, &monYScale);
+    
+    // Scale window size by DPI, but use a smaller base size so it fits on laptop screens
+    int windowWidth = (int)(850 * monXScale);
+    int windowHeight = (int)(700 * monYScale);
     
     GLFWwindow* window = glfwCreateWindow(windowWidth, windowHeight, "Reality Scanner", nullptr, nullptr);
     if (window == nullptr) {
@@ -101,6 +107,19 @@ int main(int, char**) {
     ImFont* font = io.Fonts->AddFontFromFileTTF("C:\\Windows\\Fonts\\segoeui.ttf", 18.0f * xscale, &font_config);
     if (font == nullptr) {
         io.FontGlobalScale = xscale; // Fallback
+    } else {
+        static const ImWchar icon_ranges[] = { ICON_MIN_FA, ICON_MAX_16_FA, 0 };
+        ImFontConfig icons_config;
+        icons_config.MergeMode = true;
+        icons_config.PixelSnapH = true;
+        icons_config.OversampleH = 1;
+        icons_config.OversampleV = 1;
+        io.Fonts->AddFontFromFileTTF("fonts/fa-solid-900.ttf", 16.0f * xscale, &icons_config, icon_ranges);
+        
+        // Load Bold font as the second font (AFTER FontAwesome is merged into the first)
+        ImFontConfig bold_config = font_config;
+        bold_config.MergeMode = false;
+        io.Fonts->AddFontFromFileTTF("C:\\Windows\\Fonts\\segoeuib.ttf", 20.0f * xscale, &bold_config);
     }
 
     // Professional Dark Theme with Accent Colors
@@ -115,34 +134,6 @@ int main(int, char**) {
     style.WindowBorderSize = 0.0f;
     style.FrameBorderSize = 1.0f;
 
-    ImVec4* colors = style.Colors;
-    colors[ImGuiCol_Text]                   = ImVec4(0.95f, 0.95f, 0.95f, 1.00f);
-    colors[ImGuiCol_TextDisabled]           = ImVec4(0.50f, 0.50f, 0.50f, 1.00f);
-    colors[ImGuiCol_WindowBg]               = ImVec4(0.12f, 0.12f, 0.14f, 1.00f);
-    colors[ImGuiCol_ChildBg]                = ImVec4(0.15f, 0.15f, 0.17f, 1.00f);
-    colors[ImGuiCol_PopupBg]                = ImVec4(0.15f, 0.15f, 0.17f, 1.00f);
-    colors[ImGuiCol_Border]                 = ImVec4(0.25f, 0.25f, 0.28f, 1.00f);
-    colors[ImGuiCol_FrameBg]                = ImVec4(0.20f, 0.20f, 0.22f, 1.00f);
-    colors[ImGuiCol_FrameBgHovered]         = ImVec4(0.25f, 0.25f, 0.28f, 1.00f);
-    colors[ImGuiCol_FrameBgActive]          = ImVec4(0.30f, 0.30f, 0.33f, 1.00f);
-    colors[ImGuiCol_TitleBg]                = ImVec4(0.12f, 0.12f, 0.14f, 1.00f);
-    colors[ImGuiCol_TitleBgActive]          = ImVec4(0.12f, 0.12f, 0.14f, 1.00f);
-    colors[ImGuiCol_ScrollbarBg]            = ImVec4(0.12f, 0.12f, 0.14f, 1.00f);
-    colors[ImGuiCol_ScrollbarGrab]          = ImVec4(0.30f, 0.30f, 0.33f, 1.00f);
-    colors[ImGuiCol_ScrollbarGrabHovered]   = ImVec4(0.40f, 0.40f, 0.43f, 1.00f);
-    colors[ImGuiCol_ScrollbarGrabActive]    = ImVec4(0.50f, 0.50f, 0.53f, 1.00f);
-    colors[ImGuiCol_CheckMark]              = ImVec4(0.40f, 0.60f, 1.00f, 1.00f);
-    colors[ImGuiCol_SliderGrab]             = ImVec4(0.40f, 0.60f, 1.00f, 1.00f);
-    colors[ImGuiCol_SliderGrabActive]       = ImVec4(0.50f, 0.70f, 1.00f, 1.00f);
-    colors[ImGuiCol_Button]                 = ImVec4(0.25f, 0.45f, 0.90f, 1.00f);
-    colors[ImGuiCol_ButtonHovered]          = ImVec4(0.35f, 0.55f, 1.00f, 1.00f);
-    colors[ImGuiCol_ButtonActive]           = ImVec4(0.15f, 0.35f, 0.80f, 1.00f);
-    colors[ImGuiCol_Header]                 = ImVec4(0.20f, 0.20f, 0.22f, 1.00f);
-    colors[ImGuiCol_HeaderHovered]          = ImVec4(0.25f, 0.25f, 0.28f, 1.00f);
-    colors[ImGuiCol_HeaderActive]           = ImVec4(0.30f, 0.30f, 0.33f, 1.00f);
-    colors[ImGuiCol_Separator]              = ImVec4(0.25f, 0.25f, 0.28f, 1.00f);
-    colors[ImGuiCol_TableHeaderBg]          = ImVec4(0.18f, 0.18f, 0.20f, 1.00f);
-
     ImGui_ImplGlfw_InitForOpenGL(window, true);
     ImGui_ImplOpenGL3_Init(glsl_version);
 
@@ -153,8 +144,16 @@ int main(int, char**) {
     glfwSetWindowSizeCallback(window, window_size_callback);
     glfwSetWindowRefreshCallback(window, window_refresh_callback);
 
+    // Free CPU memory of the font atlas after uploading to OpenGL
+    ImGui_ImplOpenGL3_CreateDeviceObjects();
+    io.Fonts->ClearTexData();
+
     while (!glfwWindowShouldClose(window)) {
-        glfwPollEvents();
+        if (app.NeedsContinuousUpdate()) {
+            glfwPollEvents(); // Run at maximum allowed FPS (VSync) for smooth animations
+        } else {
+            glfwWaitEvents(); // Block indefinitely until input/event to drop GPU/CPU usage to 0.0%
+        }
         RenderFrame(window);
     }
 

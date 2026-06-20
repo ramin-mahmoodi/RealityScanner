@@ -45,6 +45,9 @@ namespace Utils {
     // Write file contents
     bool WriteFile(const std::string& path, const std::string& content);
 
+    // Open file dialog and return path
+    std::string OpenFileDialog();
+
     // Run process and return handle, or nullptr if failed
     void* RunProcess(const std::string& commandLine, const std::string& currentDir);
     std::string RunProcessAndReadOutput(const std::string& commandLine, const std::string& currentDir);

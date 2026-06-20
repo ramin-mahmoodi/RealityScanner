@@ -372,10 +372,29 @@ std::string ReadFile(const std::string& path) {
 }
 
 bool WriteFile(const std::string& path, const std::string& content) {
-    std::ofstream file(path, std::ios::binary);
+    std::ofstream file(path);
     if (!file.is_open()) return false;
-    file.write(content.data(), content.size());
+    file << content;
     return true;
+}
+
+std::string OpenFileDialog() {
+    char filename[MAX_PATH];
+    OPENFILENAMEA ofn;
+    ZeroMemory(&filename, sizeof(filename));
+    ZeroMemory(&ofn, sizeof(ofn));
+    ofn.lStructSize = sizeof(ofn);
+    ofn.hwndOwner = NULL;
+    ofn.lpstrFilter = "Text Files\0*.txt\0All Files\0*.*\0";
+    ofn.lpstrFile = filename;
+    ofn.nMaxFile = MAX_PATH;
+    ofn.lpstrTitle = "Select domains file";
+    ofn.Flags = OFN_DONTADDTORECENT | OFN_FILEMUSTEXIST;
+    
+    if (GetOpenFileNameA(&ofn)) {
+        return std::string(filename);
+    }
+    return "";
 }
 
 void* RunProcess(const std::string& commandLine, const std::string& currentDir) {

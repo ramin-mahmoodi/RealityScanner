@@ -229,7 +229,7 @@ void Scanner::ScanWorker(std::string baseUrl, std::string token, std::string ser
     if (info.isValid) {
         SetStatus("Cleaning up test inbound...");
         std::string errDel;
-        api.DeleteClient("scanner@reality.test", errDel);
+        api.DeleteClient("Reality-Test", errDel);
         api.DeleteInbound(info.id, errDel);
     }
     
